@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mazen Ghanoum - إدارة الديون</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0f0f13;
+    --surface: #1a1a22;
+    --surface2: #22222e;
+    --border: #2e2e3e;
+    --accent: #f97316;
+    --accent2: #fb923c;
+    --green: #22c55e;
+    --red: #ef4444;
+    --text: #f1f1f5;
+    --text2: #9999b0;
+    --radius: 14px;
+  }
+
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .logo-text {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    color: var(--text2);
+    font-weight: 400;
+  }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+  }
+
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .btn-green {
+    background: rgba(34, 197, 94, 0.15);
+    color: var(--green);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+  }
+  .btn-green:hover { background: rgba(34, 197, 94, 0.25); }
+
+  .btn-red {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--red);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+  .btn-red:hover { background: rgba(239, 68, 68, 0.25); }
+
+  .btn-whatsapp {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white;
+  }
+  .btn-whatsapp:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: var(--surface2);
+    color: var(--text2);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--accent); }
+
+  .btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    color: var(--text2);
+    font-size: 15px;
+    transition: all 0.2s;
+  }
+  .btn-icon:hover { background: var(--surface2); color: var(--text); }
+  .btn-icon.del:hover { color: var(--red); }
+  .btn-icon.edit:hover { color: var(--accent); }
+
+  /* ===== MAIN ===== */
+  main { padding: 20px; max-width: 700px; margin: 0 auto; }
+
+  /* ===== CUSTOMERS PAGE ===== */
+  #page-customers {}
+
+  .page-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .customers-table {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .table-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 60px;
+    padding: 12px 16px;
+    background: var(--surface2);
+    font-size: 13px;
+    color: var(--text2);
+    font-weight: 700;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .table-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 60px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+
+  .table-row:last-child { border-bottom: none; }
+  .table-row:hover { background: var(--surface2); }
+
+  .table-row td, .table-row div { font-size: 14px; }
+
+  .customer-name-cell {
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .customer-phone-cell { color: var(--text2); font-size: 13px; }
+
+  .debt-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .debt-positive {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+  }
+
+  .debt-zero {
+    background: rgba(34, 197, 94, 0.15);
+    color: var(--green);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text2);
+  }
+
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 15px; }
+
+  /* ===== CUSTOMER DETAIL PAGE ===== */
+  #page-customer { display: none; }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text2);
+    font-size: 14px;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+    padding: 0;
+    font-family: 'Tajawal', sans-serif;
+    transition: color 0.2s;
+  }
+  .back-btn:hover { color: var(--accent); }
+
+  .customer-header {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 16px;
+  }
+
+  .customer-header h2 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+
+  .customer-header .phone {
+    color: var(--text2);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .action-buttons .btn {
+    justify-content: center;
+    padding: 12px 10px;
+    font-size: 13px;
+  }
+
+  /* ===== TRANSACTIONS TABLE ===== */
+  .trans-table {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .trans-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    padding: 12px 16px;
+    background: var(--surface2);
+    font-size: 13px;
+    color: var(--text2);
+    font-weight: 700;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .trans-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .trans-row:last-child { border-bottom: none; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .trans-row.debt-row .amount {
+    color: #f87171;
+    font-weight: 700;
+  }
+
+  .trans-row.payment-row .amount {
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  .trans-date { font-size: 13px; color: var(--text2); }
+
+  .type-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  .type-debt {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+  }
+
+  .type-payment {
+    background: rgba(34, 197, 94, 0.15);
+    color: var(--green);
+  }
+
+  .trans-actions { display: flex; gap: 4px; }
+
+  .total-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .total-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text2);
+  }
+
+  .total-amount {
+    font-size: 22px;
+    font-weight: 900;
+  }
+
+  .total-positive { color: #f87171; }
+  .total-zero { color: var(--green); }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: var(--surface);
+    border-radius: 20px 20px 0 0;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    padding: 24px 20px 36px;
+    width: 100%;
+    max-width: 700px;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+  }
+
+  .modal-overlay.active .modal {
+    transform: translateY(0);
+  }
+
+  .modal-handle {
+    width: 40px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+
+  .modal h3 {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text2);
+    margin-bottom: 8px;
+  }
+
+  .form-group input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+    direction: rtl;
+  }
+
+  .form-group input:focus {
+    border-color: var(--accent);
+  }
+
+  .modal-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .modal-buttons .btn { justify-content: center; padding: 13px; }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 300;
+    opacity: 0;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .trans-amount-cell { display: flex; flex-direction: column; gap: 2px; }
+
+  @media (max-width: 400px) {
+    .action-buttons { grid-template-columns: 1fr; }
+    .action-buttons .btn { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🏍️</div>
+    <div>
+      <div class="logo-text">Mazen Ghanoum</div>
+      <div class="logo-sub">إدارة الديون</div>
+    </div>
+  </div>
+  <button class="btn btn-primary" id="btn-add-customer" onclick="openAddCustomer()">
+    + إضافة زبون
+  </button>
+</header>
+
+<main>
+  <!-- صفحة الزبائن -->
+  <div id="page-customers">
+    <div class="customers-table" id="customers-table">
+      <div class="table-header">
+        <div>اسم الزبون</div>
+        <div>رقم الهاتف</div>
+        <div>مجمل الدين</div>
+        <div></div>
+      </div>
+      <div id="customers-list"></div>
+    </div>
+  </div>
+
+  <!-- صفحة الزبون -->
+  <div id="page-customer">
+    <button class="back-btn" onclick="goBack()">← رجوع</button>
+    <div class="customer-header">
+      <h2 id="detail-name"></h2>
+      <div class="phone">📞 <span id="detail-phone"></span></div>
+    </div>
+    <div class="action-buttons">
+      <button class="btn btn-red" onclick="openAddDebt()">➕ إضافة دين</button>
+      <button class="btn btn-green" onclick="openAddPayment()">💰 إضافة دفعة</button>
+      <button class="btn btn-whatsapp" onclick="sendWhatsApp()">📲 واتساب</button>
+    </div>
+    <div class="trans-table">
+      <div class="trans-header">
+        <div>التاريخ</div>
+        <div>المبلغ</div>
+        <div>إجراءات</div>
+      </div>
+      <div id="trans-list"></div>
+    </div>
+    <div class="total-bar">
+      <div class="total-label">مجمل الدين</div>
+      <div class="total-amount" id="total-amount">0</div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal إضافة زبون -->
+<div class="modal-overlay" id="modal-customer">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3 id="modal-customer-title">إضافة زبون جديد</h3>
+    <div class="form-group">
+      <label>اسم الزبون</label>
+      <input type="text" id="input-name" placeholder="مثال: أحمد محمد">
+    </div>
+    <div class="form-group">
+      <label>رقم الهاتف</label>
+      <input type="tel" id="input-phone" placeholder="مثال: 0791234567">
+    </div>
+    <div class="modal-buttons">
+      <button class="btn btn-ghost" onclick="closeModal('modal-customer')">إلغاء</button>
+      <button class="btn btn-primary" onclick="saveCustomer()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal إضافة دين -->
+<div class="modal-overlay" id="modal-debt">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>إضافة دين</h3>
+    <div class="form-group">
+      <label>المبلغ</label>
+      <input type="number" id="input-debt" placeholder="مثال: 50">
+    </div>
+    <div class="form-group">
+      <label>التاريخ</label>
+      <input type="date" id="input-debt-date">
+    </div>
+    <div class="modal-buttons">
+      <button class="btn btn-ghost" onclick="closeModal('modal-debt')">إلغاء</button>
+      <button class="btn btn-red" onclick="saveDebt()">إضافة</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal إضافة دفعة -->
+<div class="modal-overlay" id="modal-payment">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>إضافة دفعة</h3>
+    <div class="form-group">
+      <label>المبلغ المدفوع</label>
+      <input type="number" id="input-payment" placeholder="مثال: 20">
+    </div>
+    <div class="form-group">
+      <label>التاريخ</label>
+      <input type="date" id="input-payment-date">
+    </div>
+    <div class="modal-buttons">
+      <button class="btn btn-ghost" onclick="closeModal('modal-payment')">إلغاء</button>
+      <button class="btn btn-green" onclick="savePayment()">إضافة</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal تعديل -->
+<div class="modal-overlay" id="modal-edit">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>تعديل</h3>
+    <div class="form-group">
+      <label>المبلغ</label>
+      <input type="number" id="input-edit-amount" placeholder="المبلغ">
+    </div>
+    <div class="form-group">
+      <label>التاريخ</label>
+      <input type="date" id="input-edit-date">
+    </div>
+    <div class="modal-buttons">
+      <button class="btn btn-ghost" onclick="closeModal('modal-edit')">إلغاء</button>
+      <button class="btn btn-primary" onclick="saveEdit()">حفظ التعديل</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DATA =====
+let data = JSON.parse(localStorage.getItem('mg_debt_app') || '{"customers":[]}');
+let currentCustomerId = null;
+let editingTransId = null;
+let editingCustomerId = null;
+
+function save() {
+  localStorage.setItem('mg_debt_app', JSON.stringify(data));
+}
+
+function genId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2);
+}
+
+function today() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  const [y, m, day] = d.split('-');
+  return `${day}/${m}/${y}`;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ===== CUSTOMERS PAGE =====
+function renderCustomers() {
+  const list = document.getElementById('customers-list');
+  if (!data.customers.length) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">🏍️</div><p>لا يوجد زبائن بعد<br>اضغط "إضافة زبون" للبداية</p></div>`;
+    return;
+  }
+  list.innerHTML = data.customers.map(c => {
+    const total = getTotal(c.id);
+    const cls = total > 0 ? 'debt-positive' : 'debt-zero';
+    const label = total > 0 ? `${total} ₪` : 'مسوّى';
+    return `
+      <div class="table-row" onclick="openCustomer('${c.id}')">
+        <div class="customer-name-cell">${c.name}</div>
+        <div class="customer-phone-cell">${c.phone}</div>
+        <div><span class="debt-badge ${cls}">${label}</span></div>
+        <div onclick="event.stopPropagation()">
+          <button class="btn-icon del" onclick="deleteCustomer('${c.id}')">🗑️</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function getTotal(customerId) {
+  const c = data.customers.find(x => x.id === customerId);
+  if (!c) return 0;
+  return (c.transactions || []).reduce((sum, t) => {
+    return t.type === 'debt' ? sum + t.amount : sum - t.amount;
+  }, 0);
+}
+
+// ===== ADD CUSTOMER =====
+function openAddCustomer() {
+  editingCustomerId = null;
+  document.getElementById('modal-customer-title').textContent = 'إضافة زبون جديد';
+  document.getElementById('input-name').value = '';
+  document.getElementById('input-phone').value = '';
+  openModal('modal-customer');
+  setTimeout(() => document.getElementById('input-name').focus(), 350);
+}
+
+function saveCustomer() {
+  const name = document.getElementById('input-name').value.trim();
+  const phone = document.getElementById('input-phone').value.trim();
+  if (!name) { showToast('⚠️ أدخل اسم الزبون'); return; }
+  if (editingCustomerId) {
+    const c = data.customers.find(x => x.id === editingCustomerId);
+    c.name = name; c.phone = phone;
+    save(); closeModal('modal-customer'); renderCustomers();
+    showToast('✅ تم تعديل الزبون');
+    editingCustomerId = null;
+  } else {
+    data.customers.push({ id: genId(), name, phone, transactions: [] });
+    save(); closeModal('modal-customer'); renderCustomers();
+    showToast('✅ تمت إضافة الزبون');
+  }
+}
+
+function deleteCustomer(id) {
+  if (!confirm('حذف هذا الزبون وكل ديونه؟')) return;
+  data.customers = data.customers.filter(c => c.id !== id);
+  save(); renderCustomers();
+  showToast('🗑️ تم الحذف');
+}
+
+// ===== CUSTOMER DETAIL =====
+function openCustomer(id) {
+  currentCustomerId = id;
+  const c = data.customers.find(x => x.id === id);
+  document.getElementById('detail-name').textContent = c.name;
+  document.getElementById('detail-phone').textContent = c.phone;
+  document.getElementById('page-customers').style.display = 'none';
+  document.getElementById('page-customer').style.display = 'block';
+  document.getElementById('btn-add-customer').style.display = 'none';
+  renderTransactions();
+}
+
+function goBack() {
+  currentCustomerId = null;
+  document.getElementById('page-customer').style.display = 'none';
+  document.getElementById('page-customers').style.display = 'block';
+  document.getElementById('btn-add-customer').style.display = 'flex';
+  renderCustomers();
+}
+
+function renderTransactions() {
+  const c = data.customers.find(x => x.id === currentCustomerId);
+  const list = document.getElementById('trans-list');
+  const txs = c.transactions || [];
+  if (!txs.length) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">📋</div><p>لا توجد حركات بعد</p></div>`;
+  } else {
+    list.innerHTML = [...txs].reverse().map(t => {
+      const isDebt = t.type === 'debt';
+      const sign = isDebt ? '+' : '-';
+      const cls = isDebt ? 'debt-row' : 'payment-row';
+      const tag = isDebt
+        ? `<span class="type-tag type-debt">دين</span>`
+        : `<span class="type-tag type-payment">دفعة</span>`;
+      return `
+        <div class="trans-row ${cls}">
+          <div>
+            <div class="trans-date">${formatDate(t.date)}</div>
+            <div style="margin-top:3px">${tag}</div>
+          </div>
+          <div class="amount" style="font-weight:700;font-size:15px">${sign}${t.amount} ₪</div>
+          <div class="trans-actions">
+            <button class="btn-icon edit" onclick="openEditTrans('${t.id}')">✏️</button>
+            <button class="btn-icon del" onclick="deleteTrans('${t.id}')">🗑️</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+  const total = getTotal(currentCustomerId);
+  const el = document.getElementById('total-amount');
+  el.textContent = `${total} ₪`;
+  el.className = 'total-amount ' + (total > 0 ? 'total-positive' : 'total-zero');
+}
+
+// ===== ADD DEBT =====
+function openAddDebt() {
+  document.getElementById('input-debt').value = '';
+  document.getElementById('input-debt-date').value = today();
+  openModal('modal-debt');
+  setTimeout(() => document.getElementById('input-debt').focus(), 350);
+}
+
+function saveDebt() {
+  const amount = parseFloat(document.getElementById('input-debt').value);
+  const date = document.getElementById('input-debt-date').value;
+  if (!amount || amount <= 0) { showToast('⚠️ أدخل مبلغ صحيح'); return; }
+  const c = data.customers.find(x => x.id === currentCustomerId);
+  c.transactions.push({ id: genId(), type: 'debt', amount, date });
+  save(); closeModal('modal-debt'); renderTransactions();
+  showToast('✅ تمت إضافة الدين');
+}
+
+// ===== ADD PAYMENT =====
+function openAddPayment() {
+  document.getElementById('input-payment').value = '';
+  document.getElementById('input-payment-date').value = today();
+  openModal('modal-payment');
+  setTimeout(() => document.getElementById('input-payment').focus(), 350);
+}
+
+function savePayment() {
+  const amount = parseFloat(document.getElementById('input-payment').value);
+  const date = document.getElementById('input-payment-date').value;
+  if (!amount || amount <= 0) { showToast('⚠️ أدخل مبلغ صحيح'); return; }
+  const c = data.customers.find(x => x.id === currentCustomerId);
+  c.transactions.push({ id: genId(), type: 'payment', amount, date });
+  save(); closeModal('modal-payment'); renderTransactions();
+  showToast('✅ تمت إضافة الدفعة');
+}
+
+// ===== EDIT / DELETE TRANS =====
+function openEditTrans(id) {
+  const c = data.customers.find(x => x.id === currentCustomerId);
+  const t = c.transactions.find(x => x.id === id);
+  editingTransId = id;
+  document.getElementById('input-edit-amount').value = t.amount;
+  document.getElementById('input-edit-date').value = t.date;
+  openModal('modal-edit');
+}
+
+function saveEdit() {
+  const amount = parseFloat(document.getElementById('input-edit-amount').value);
+  const date = document.getElementById('input-edit-date').value;
+  if (!amount || amount <= 0) { showToast('⚠️ أدخل مبلغ صحيح'); return; }
+  const c = data.customers.find(x => x.id === currentCustomerId);
+  const t = c.transactions.find(x => x.id === editingTransId);
+  t.amount = amount; t.date = date;
+  save(); closeModal('modal-edit'); renderTransactions();
+  showToast('✅ تم التعديل');
+  editingTransId = null;
+}
+
+function deleteTrans(id) {
+  if (!confirm('حذف هذه الحركة؟')) return;
+  const c = data.customers.find(x => x.id === currentCustomerId);
+  c.transactions = c.transactions.filter(x => x.id !== id);
+  save(); renderTransactions();
+  showToast('🗑️ تم الحذف');
+}
+
+// ===== WHATSAPP =====
+function sendWhatsApp() {
+  const c = data.customers.find(x => x.id === currentCustomerId);
+  const total = getTotal(currentCustomerId);
+  if (total <= 0) { showToast('✅ الزبون ليس عليه دين'); return; }
+  const msg = `مرحبا\nدينك هوي ${total} ₪`;
+  const phone = c.phone.replace(/\D/g, '');
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+// ===== MODAL HELPERS =====
+function openModal(id) {
+  document.getElementById(id).classList.add('active');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+}
+
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('active');
+  });
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+  }
+});
+
+// ===== INIT =====
+renderCustomers();
+</script>
+</body>
+</html>
