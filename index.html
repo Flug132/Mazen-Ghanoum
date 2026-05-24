@@ -263,9 +263,12 @@
   <!-- صفحة الزبون -->
   <div id="page-customer">
     <button class="back-btn" onclick="goBack()">← رجوع</button>
-    <div class="customer-header">
-      <h2 id="detail-name"></h2>
-      <div class="phone">📞 <span id="detail-phone"></span></div>
+    <div class="customer-header" style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <h2 id="detail-name"></h2>
+        <div class="phone">📞 <span id="detail-phone"></span></div>
+      </div>
+      <button class="btn-icon edit" onclick="openEditCustomer()" style="font-size:18px">✏️</button>
     </div>
     <div class="action-buttons">
       <button class="btn btn-red" onclick="openAddDebt()">➕ دين</button>
@@ -455,6 +458,11 @@ function saveCustomer() {
   if (editingCustomerId) {
     const c = data.customers.find(x => x.id === editingCustomerId);
     c.name = name; c.phone = phone;
+    // اذا كنا بصفحة الزبون حدّث العرض
+    if (currentCustomerId === editingCustomerId) {
+      document.getElementById('detail-name').textContent = name;
+      document.getElementById('detail-phone').textContent = phone;
+    }
     editingCustomerId = null;
     showToast('✅ تم التعديل');
   } else {
@@ -610,21 +618,36 @@ function deleteTrans(id) {
 }
 
 // ===== WHATSAPP =====
+function openEditCustomer() {
+  const c = data.customers.find(x => x.id === currentCustomerId);
+  editingCustomerId = currentCustomerId;
+  document.getElementById('modal-customer-title').textContent = 'تعديل بيانات الزبون';
+  document.getElementById('input-name').value = c.name;
+  document.getElementById('input-phone').value = c.phone;
+  openModal('modal-customer');
+  setTimeout(() => document.getElementById('input-name').focus(), 350);
+}
+
+function pad(str, len) {
+  str = String(str);
+  while (str.length < len) str = str + ' ';
+  return str;
+}
+
 function sendWhatsApp() {
   const c = data.customers.find(x => x.id === currentCustomerId);
   const txs = c.transactions || [];
   const total = getTotal(currentCustomerId);
   if (total <= 0) { showToast('✅ الزبون ليس عليه دين'); return; }
 
-  // رتب كل الحركات حسب التاريخ
   const sorted = [...txs].sort((a, b) => new Date(a.date) - new Date(b.date));
 
   const lines = sorted.map(t => {
-    if (t.type === 'debt') {
-      return `${formatDate(t.date)} | فاتورة ${t.invoice} | ${t.amount}`;
-    } else {
-      return `${formatDate(t.date)} | دفعة | ${t.amount}`;
-    }
+    const date = pad(formatDate(t.date), 11);
+    const amount = pad(t.amount, 10);
+    const type = pad(t.type === 'debt' ? 'فاتورة' : 'دفعة', 10);
+    const invoice = t.type === 'debt' ? pad(t.invoice, 10) : pad('', 10);
+    return `${date}| ${amount}| ${type}| ${invoice}`;
   }).join('\n');
 
   const msg = `مرحبا\n\n${lines}\n\nالمتبقي: ${total}`;
